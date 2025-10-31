@@ -1,12 +1,13 @@
 return
 {
+    -- CONFIGURACIÓN DE DEBUGGER / DEBUGGER CONFIGURATION --
     "mfussenegger/nvim-dap",
     event = "VeryLazy",
     dependencies = {
-        "rcarriga/nvim-dap-ui", -- Opcional: Da una UI mejor, se puede configurar
-        "nvim-neotest/nvim-nio", -- Requerido
-        "jay-babu/mason-nvim-dap.nvim", -- Instalar debuggers con mason
-        "theHamsta/nvim-dap-virtual-text", -- Permite ver valores en el código durante el debug
+        "rcarriga/nvim-dap-ui", -- Opcional: Da una UI mejor, se puede configurar / Optional: Better customizable UI
+        "nvim-neotest/nvim-nio", -- Requerido / Required
+        "jay-babu/mason-nvim-dap.nvim", -- Instalar debuggers con mason / Mason can install debuggers
+        "theHamsta/nvim-dap-virtual-text", -- Permite ver valores en el código durante el debug / Shows inline values while debugging
     },
 
     config = function()
@@ -15,7 +16,7 @@ return
         local ui = require("dapui")
         local dap_virtual_text = require("nvim-dap-virtual-text")
 
-        dap_virtual_text.setup() -- Inicializa sin configuraciones custon
+        dap_virtual_text.setup() -- Inicializa sin configuraciones custom / Start without custom configuration
 
         mason_dap.setup({
             ensure_installed = { "cppdbg" },
@@ -71,20 +72,20 @@ return
         ui.setup({
             layouts = { {
 
-                -- Panel izquierdo
+                -- Panel izquierdo / Left panel
                 elements = {
                     { id = "scopes", size = 0.40 },
                     { id = "breakpoints", size = 0.30 },
                     { id = "stacks", size = 0.30 },
-                    --{ id = "watches", size = 0.20}, -- No uso watches de momento
+                    --{ id = "watches", size = 0.20}, -- No uso watches de momento / I do not use watches right now
                 },
                 size = 40,
                 position = "left", },
 
-                -- Panel derecho
+                -- Panel derecho / Right panel
                 {
                     elements = {
-                        --{ id = "repl", size = 0.6 }, -- No uso REPL de momento
+                        --{ id = "repl", size = 0.6 }, -- No uso REPL de momento / I do not use REPL right now
                         { id = "console", size = 1 },
                     },
                     size = 12,
@@ -110,5 +111,3 @@ return
 
     end,
 }
-
-

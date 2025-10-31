@@ -3,13 +3,12 @@ return {
     config = function()
         require("telescope").setup{
             defaults = {
-                -- initial_mode = "normal",
-                hidden = true,
+                hidden = true, -- muestra archivos ocultos predeterminado / show hidden files as a default config
             },
             pickers = {
                 find_files = {
-                    hidden = true, -- no ignora archivos ocultos
-                    no_ignore = true, -- no ignora .gitignore
+                    hidden = true, -- no ignora archivos ocultos / show hidden files
+                    no_ignore = true, -- no ignora .gitignore / show .gitignore files
                 },
                 git_files = {
                     hidden = true,
@@ -18,6 +17,6 @@ return {
                 }
             },
         }
-        require("telescope").load_extension('harpoon')
+        require("telescope").load_extension('harpoon') -- harpoon funciona como extensión de telescope / harpoon as a telescope extension
     end,
 }

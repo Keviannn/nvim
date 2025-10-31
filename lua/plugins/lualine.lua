@@ -1,7 +1,7 @@
 return {
     'nvim-lualine/lualine.nvim',
     config = function()
-        vim.opt.showmode = false -- Desactiva la barra original (solo lualine)
+        vim.opt.showmode = false -- Desactiva la barra original (solo lualine) / Do not show original bar (only lualine)
         require('lualine').setup {
             options = {
                 icons_enabled = true,
@@ -20,7 +20,7 @@ return {
                     statusline = 1000,
                     tabline = 1000,
                     winbar = 1000,
-                    refresh_time = 60, -- ~60fps (Lo he cambiado de 16 a 60ms me dan igual los 60fps)
+                    refresh_time = 60, -- (Lo he cambiado de 16 a 60ms me dan igual los 60fps) / (I changed from 16ms to 60ms I do not care about 60fps)
                     events = {
                         'WinEnter',
                         'BufEnter',

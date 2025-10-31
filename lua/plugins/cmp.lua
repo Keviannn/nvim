@@ -1,7 +1,7 @@
 return {
     {
         "hrsh7th/nvim-cmp",
-        version = false, -- last release is way too old
+        version = false, -- La última release esta outdated / Last release is outdated
         event = "InsertEnter",
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
@@ -25,7 +25,7 @@ return {
             local dict = require("cmp_dictionary")
             require("luasnip.loaders.from_vscode").lazy_load()
 
-            -- Source custom con diccionario español
+            -- Source custom con diccionario español / Custom source for spanish dictionary
             dict.setup({
                 paths = {vim.fn.expand("~/.config/nvim/lua/kevia/dictionaries/dic_es.txt")},
             })
@@ -47,7 +47,7 @@ return {
                     ["<C-j>"] = cmp.mapping.select_next_item(),
                     ["<CR>"] = cmp.mapping.confirm({ select = false }),
 
-                    -- Salto hacia el siguiente placeholder (no se como va)
+                    -- Salto hacia el siguiente placeholder en snippets / Jumps to next placeholder inside snippets
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_next_item()
@@ -70,14 +70,13 @@ return {
                 formatting = {
                     format = function(entry, vim_item)
 
-                        -- Se llama a la funcion cmp_format con (entry, vim_item) y configurada con maxwidth y ellipsis_char 
-                        -- y te devuelve vim_item en funcion de eso
+                        -- Se llama a la funcion cmp_format con (entry, vim_item) y configurada con maxwidth y ellipsis_char y te devuelve vim_item en funcion de eso / Calls cmp_format with (entry, vim_item) and configures maxwidth and ellipsis_char and returns vim_item
                         vim_item = require("lspkind").cmp_format({
                             maxwidth = 50,
                             ellipsis_char = "...",
                         })(entry, vim_item)
 
-                        -- Custom: Icono, texto y color para diccionario
+                        -- Custom: Icono, texto y color para diccionario / Custom: Icon, text and color for the dictionary
                         if entry.source.name == "dictionary" then
                             vim_item.kind = " Dictionary"
                             vim_item.kind_hl_group = "CmpItemKindVariable"
@@ -88,7 +87,7 @@ return {
                 }
             })
 
-            -- Custom: Para archivos txt usa el diccionario si no, no
+            -- Custom: Para archivos txt usa el diccionario si no, no / Only show dictionary sources in .txt files
             cmp.setup.filetype("text", {
                 sources = cmp.config.sources({
                     { name = "dictionary", keyword_length = 2 },

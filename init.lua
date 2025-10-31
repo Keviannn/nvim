@@ -78,8 +78,8 @@ end
 
 -- ATAJOS CUSTOM --
 -- leader se cambia en lazy.lua
-k.set('n', '<leader>f', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
-k.set('n', '<leader>g', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
+k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
+k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
 k.set('n', '<leader>l', ':Lazy<CR>', { desc = 'Abre LazyLim / Opens LazyVim', silent = true })
 k.set({'n', 'v'}, ' ', ':', { desc = 'Espacio es ahora : / Change : to space key' })
 k.set('n', '<leader>qq', ':q!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
