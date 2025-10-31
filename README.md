@@ -1,6 +1,6 @@
 # My Custom NeoVim Setup
 
-A personalized NeoVim configuration leveraging **LazyVim** and custom Lua functions for an optimized and efficient coding environment.
+A personalized NeoVim configuration that fuses **LazyVim** and custom configurations, keybindsand functions for an optimized and efficient coding environment.
 
 ---
 
@@ -26,7 +26,7 @@ This setup includes a variety of plugins configured to enhance productivity:
 - **cpm**: Autocompletion engine supporting dictionaries, snippets, and LSPs.
 - **lualine**: Modern, customizable status line replacing the default one.
 
-All plugins and keybindings have been configured to fit my workflow.
+All plugins and related keybinds have been configured to fit my workflow and are present and explained in [init.lua](./init.lua).
 
 ---
 
@@ -118,10 +118,13 @@ end
 ```
 
 ## Additional features
-- A custom Spanish dictionary for autocompletion, generated from the 20,000 most frequent words from the RAE corpus using a custom C program handling UTF-8 characters.
+- A custom Spanish dictionary for autocompletion, generated from the **20,000 most frequent words from the RAE corpus** using a custom C program handling UTF-8 characters.
 
 - CMP configuration shows a book icon and "Dictionary" label for dictionary suggestions, improving visual distinction between LSP and text completions.
 
 ## Screenshot
 
+Example of real working with this setup for my HPC class in university.
+
 ![nvim hpc](./example.png)
+
