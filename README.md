@@ -2,7 +2,7 @@
 
 A personalized neovim configuration that fuses **lazyvim** and custom configurations, keybindsand functions for an optimized and efficient coding environment.
 
-Comments inside files are available in spanish and english.
+Comments inside files are available in spanish and english and non-commented lines are default configurations.
 
 ---
 
