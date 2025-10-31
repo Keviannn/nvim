@@ -119,10 +119,14 @@ local function open_naviterm()
 end
 ```
 
+---
+
 ## Additional features
 - A custom Spanish dictionary for autocompletion, generated from the **20,000 most frequent words from the RAE corpus** using a custom C program handling UTF-8 characters.
 
 - CMP configuration shows a book icon and "Dictionary" label for dictionary suggestions, improving visual distinction between LSP and text completions.
+
+---
 
 ## Screenshot
 
