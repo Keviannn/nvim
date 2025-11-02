@@ -1,15 +1,17 @@
 # My Custom NeoVim Setup
 
-A personalized neovim configuration that fuses **lazyvim** and custom configurations, keybindsand functions for an optimized and efficient coding environment.
-
-Comments inside files are available in spanish and english and non-commented lines are default configurations.
+A personalized neovim configuration that fuses **lazyvim** and custom configurations, keybinds and functions for an optimized and efficient coding environment.
 
 ---
 
 ## Description
 
-I have been interested in neovim for quite some time, and during the first semester of 2025, i fully committed to creating a setup that suits my needs.  
-this configuration primarily uses the **lazyvim** plugin manager, and whenever existing plugins weren't enough, i implemented my own lua functions to fill in the gaps.
+I have been interested in neovim for quite some time, and during the first semester of 2025, I fully committed to creating a setup that suits my needs.  
+this configuration primarily uses the **lazyvim** plugin manager, and whenever existing plugins weren't enough, I implemented my own lua functions to fill in the gaps.
+
+Comments inside files are available in spanish and english and non-commented lines are default configurations.
+
+For instalation unzip the chosen release on your .config/nvim/ folder.
 
 ---
 
