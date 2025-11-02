@@ -1,5 +1,5 @@
-require("kevia.settings")
-require("kevia.lazy")
+require("user.settings")
+require("user.lazy")
 
 local k = vim.keymap
 local api = vim.api

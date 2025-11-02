@@ -27,7 +27,7 @@ return {
 
             -- Source custom con diccionario español / Custom source for spanish dictionary
             dict.setup({
-                paths = {vim.fn.expand("~/.config/nvim/lua/kevia/dictionaries/dic_es.txt")},
+                paths = {vim.fn.expand("~/.config/nvim/lua/user/dictionaries/dic_es.txt")},
             })
 
             cmp.setup({
