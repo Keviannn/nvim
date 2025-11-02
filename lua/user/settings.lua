@@ -20,3 +20,4 @@ o.inccommand = "split"      -- Muestra al hacer :s/../.. los cambios que se van 
 o.splitbelow = true         -- Al splitear lo hace debajo / Splits below
 o.mouse = ""                -- Desactiva el ratón en nvim / No mouse functions
 o.linebreak = true          -- Los saltos en funcion de el tamaño de la ventana son en función de espacios y linebreak / Line jumps because of window size are because of spaces and linebreaks
+o.autoread = true           -- Relee bufferes al volver al focus / Rereads buffers after comming into focus
