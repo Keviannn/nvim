@@ -96,6 +96,7 @@ k.set({'n', 'v', 'i'}, '<Left>', '<Nop>', { desc = "Impide usar las flechas / Bl
 k.set({'n', 'v', 'i'}, '<Right>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set('n', '<Esc>', ':noh<CR>', { desc = "Esc me quita el highlight de búsqueda / Esc hides search highlight", silent = true })
 k.set('n', '<leader>n', open_naviterm, { desc = "Abrir naviterm / Opens naviterm", silent = true })
+k.set('n', 'f', '/', { desc = "Buscar usando la f / Find using f" })
 
 
 -- ATAJOS DEBUGGER --
