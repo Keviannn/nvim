@@ -71,6 +71,7 @@ local function open_naviterm()
 
     -- Y se llama a naviterm, se setea su id en naviterm_buf y se le da un nombre al buffer / Call naviterm, set its id in naviterm_buf, and give the buffer a name
     vim.cmd('terminal naviterm')
+    vim.cmd('startinsert')
     naviterm_buf = api.nvim_get_current_buf()
     api.nvim_buf_set_name(naviterm_buf, "Naviterm")
 end
