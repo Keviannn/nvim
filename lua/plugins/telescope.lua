@@ -4,6 +4,11 @@ return {
         require("telescope").setup{
             defaults = {
                 hidden = true, -- muestra archivos ocultos predeterminado / show hidden files as a default config
+                file_ignore_patterns = {
+                    "^[^.]+$",
+                    "%.o$",
+                    "%.png$",
+                },
             },
             pickers = {
                 find_files = {
