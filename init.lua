@@ -10,7 +10,7 @@ local api = vim.api
 local term_buf = nil
 local term_win = nil
 
-local function toggle_terminal()
+local function toggle_terminal_window()
     -- Si la ventana de la terminal sigue abierta, ciérrala (ocúltala) / If the terminal window is still open, close it (hide it)
     if term_win and api.nvim_win_is_valid(term_win) then
         api.nvim_win_hide(term_win)
@@ -33,6 +33,43 @@ local function toggle_terminal()
     end
 
     vim.cmd('startinsert')
+end
+
+local function open_terminal()
+
+    -- Tomo el buffer actual / Get the current buffer
+    local in_buf = api.nvim_get_current_buf()
+
+    -- Si el buffer de la terminal existe, es válido... / If the terminal buffer exists and is valid...
+    if term_buf and api.nvim_buf_is_valid(term_buf) then
+
+        -- ... y es el actual / ...and it is the current buffer
+        if term_buf == in_buf then
+            -- Cambia al buffer previo / Switch to the previous buffer
+            api.nvim_set_current_buf(prev_buf)
+            return
+        end
+
+        -- ... y no es el actual / ... and it is not the current buffer
+
+        -- Actualiza el buffer previo / Update the previous buffer
+        prev_buf = in_buf
+
+        -- Y cambia al buffer de la terminal / And switch to the terminal buffer
+        api.nvim_set_current_buf(term_buf)
+        return
+    end
+
+    -- Si el buffer de naviterm no existe o no es válido (Primera iteración) / If the naviterm buffer does not exist or is not valid (first iteration)
+
+    -- El buffer actual se convierte en el previo / Set the current buffer as the previous buffer
+    prev_buf = in_buf
+
+    -- Y se llama a naviterm, se setea su id en term_buf y se le da un nombre al buffer / Call naviterm, set its id in term_buf, and give the buffer a name
+    vim.cmd('terminal')
+    vim.cmd('startinsert')
+    term_buf = api.nvim_get_current_buf()
+    api.nvim_buf_set_name(term_buf, "Terminal")
 end
 
 -- CONFIGURACIÓN NAVITERM / NAVITERM CONFIGURATION --
@@ -90,7 +127,8 @@ k.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Enseñar errores de
 k.set('n', '<leader>h', ':Telescope harpoon marks<CR>', {desc = "Abrir marks de telescope y harpoon / Opens harpoon marks in Telescope", silent = true })
 k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar buffers / Easier to select buffers
 k.set('t', '<Esc>', [[<C-\><C-n>]], { desc = "Sale del modo inserción en terminal / Gets out of insert mode in terminal mode", silent = true })
-k.set('n', '<leader>t', toggle_terminal, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
+k.set('n', '<leader>tw', toggle_terminal_window, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
+k.set('n', '<leader>tt', open_terminal, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
 k.set({'n', 'v', 'i'}, '<Up>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set({'n', 'v', 'i'}, '<Down>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set({'n', 'v', 'i'}, '<Left>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
