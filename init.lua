@@ -57,15 +57,16 @@ local function open_terminal()
 
         -- Y cambia al buffer de la terminal / And switch to the terminal buffer
         api.nvim_set_current_buf(term_buf)
+        vim.cmd('startinsert')
         return
     end
 
-    -- Si el buffer de naviterm no existe o no es válido (Primera iteración) / If the naviterm buffer does not exist or is not valid (first iteration)
+    -- Si el buffer de la terminal no existe o no es válido (Primera iteración) / If the terminal buffer does not exist or is not valid (first iteration)
 
     -- El buffer actual se convierte en el previo / Set the current buffer as the previous buffer
     prev_buf = in_buf
 
-    -- Y se llama a naviterm, se setea su id en term_buf y se le da un nombre al buffer / Call naviterm, set its id in term_buf, and give the buffer a name
+    -- Y se llama a la terminal, se setea su id en term_buf y se le da un nombre al buffer / Call terminal, set its id in term_buf, and give the buffer a name
     vim.cmd('terminal')
     vim.cmd('startinsert')
     term_buf = api.nvim_get_current_buf()
@@ -98,6 +99,7 @@ local function open_naviterm()
 
         -- Y cambia al buffer de naviterm / And switch to the naviterm buffer
         api.nvim_set_current_buf(naviterm_buf)
+        vim.cmd('startinsert')
         return
     end
 
