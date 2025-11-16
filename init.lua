@@ -116,13 +116,19 @@ local function open_naviterm()
 end
 
 -- CONFIGURACIÓN COPILOT / COPILOT CONFIGURATION --
+local cmp = require("cmp")
+
+sources = cmp.get_config().sources
+
 local function enable_copilot()
     vim.cmd('Copilot enable')
+    cmp.setup.buffer({ sources = {} }) -- Deshabilita otras fuentes de autocompletado al activar Copilot / Disables other autocomplete sources when enabling Copilot
     print("Copilot enabled")
 end
 
 local function disable_copilot()
     vim.cmd('Copilot disable')
+    cmp.setup.buffer({ sources = sources }) -- Habilita las fuentes originales de autocompletado al desactivar Copilot / Enables original autocomplete sources when disabling Copilot
     print("Copilot disabled")
 end
 
