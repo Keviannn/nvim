@@ -115,8 +115,18 @@ local function open_naviterm()
     api.nvim_buf_set_name(naviterm_buf, "Naviterm")
 end
 
+-- CONFIGURACIÓN COPILOT / COPILOT CONFIGURATION --
+local function enable_copilot()
+    vim.cmd('Copilot enable')
+    print("Copilot enabled")
+end
 
--- ATAJOS CUSTOM --
+local function disable_copilot()
+    vim.cmd('Copilot disable')
+    print("Copilot disabled")
+end
+
+-- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
 -- leader se cambia en lazy.lua
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
 k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
@@ -138,7 +148,11 @@ k.set({'n', 'v', 'i'}, '<Right>', '<Nop>', { desc = "Impide usar las flechas / B
 k.set('n', '<Esc>', ':noh<CR>', { desc = "Esc me quita el highlight de búsqueda / Esc hides search highlight", silent = true })
 k.set('n', '<leader>n', open_naviterm, { desc = "Abrir naviterm / Opens naviterm", silent = true })
 
--- ATAJOS DEBUGGER --
+-- ATAJOS COPILOT / COPILOT SHORTCUTS --
+k.set("n", "<leader>ce", enable_copilot, { desc = "Activar copilot / Enables copilot", noremap = true })
+k.set("n", "<leader>cd", disable_copilot, { desc = "Desactivar copilot / Disable copilot", noremap = true})
+
+-- ATAJOS DEBUGGER / DEBUGGER SHORTCUTS --
 local dap = require("dap")
 local dapui = require("dapui")
 local dapvt = require("nvim-dap-virtual-text")
@@ -161,7 +175,6 @@ end, { desc = "Terminate", noremap = true, silent = true })
 k.set("n", "<leader>de", function()
   dap.set_exception_breakpoints({ "all" })
 end, { desc = "Set Exception Breakpoints", noremap = true, silent = true })
-
 
 -- CAMBIAR COMO SE VEN LOS COMENTARIOS TODO / CHANGES HOW TODO COMMENTS LOOK --
 api.nvim_set_hl(0, "Todo", {fg = "#7fbfff", bg = "NONE", italic = true})
