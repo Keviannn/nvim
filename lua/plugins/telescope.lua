@@ -8,6 +8,8 @@ return {
                     "^[^.]+$",
                     "%.o$",
                     "%.png$",
+                    "%.class$",
+                    "%.jpeg$",
                 },
             },
             pickers = {
