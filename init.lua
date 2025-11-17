@@ -132,6 +132,14 @@ local function disable_copilot()
     print("Copilot disabled")
 end
 
+-- Deshabilita Copilot automáticamente al entrar en un buffer / Automatically disables Copilot when entering a buffer
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = function()
+        vim.cmd('Copilot disable')
+    end,
+})
+
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
 -- leader se cambia en lazy.lua
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
