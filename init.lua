@@ -122,23 +122,15 @@ sources = cmp.get_config().sources
 
 local function enable_copilot()
     vim.cmd('Copilot enable')
-    cmp.setup.buffer({ sources = {} }) -- Deshabilita otras fuentes de autocompletado al activar Copilot / Disables other autocomplete sources when enabling Copilot
+    cmp.setup({ sources = {} }) -- Deshabilita otras fuentes de autocompletado al activar Copilot / Disables other autocomplete sources when enabling Copilot
     print("Copilot enabled")
 end
 
 local function disable_copilot()
     vim.cmd('Copilot disable')
-    cmp.setup.buffer({ sources = sources }) -- Habilita las fuentes originales de autocompletado al desactivar Copilot / Enables original autocomplete sources when disabling Copilot
+    cmp.setup({ sources = sources }) -- Habilita las fuentes originales de autocompletado al desactivar Copilot / Enables original autocomplete sources when disabling Copilot
     print("Copilot disabled")
 end
-
--- Deshabilita Copilot automáticamente al entrar en un buffer / Automatically disables Copilot when entering a buffer
-vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = "*",
-    callback = function()
-        vim.cmd('Copilot disable')
-    end,
-})
 
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
 -- leader se cambia en lazy.lua
