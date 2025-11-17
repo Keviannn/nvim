@@ -132,6 +132,12 @@ local function disable_copilot()
     print("Copilot disabled")
 end
 
+-- Deshabilita otras fuentes de autocompletado al iniciar Neovim / Disables other autocomplete sources when starting Neovim
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        require("cmp").setup({ sources = {} })
+    end,
+})
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
 -- leader se cambia en lazy.lua
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
