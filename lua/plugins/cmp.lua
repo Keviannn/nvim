@@ -32,6 +32,10 @@ return {
 
             cmp.setup({
 
+                enabled = function()
+                    return vim.g.cmp_enabled
+                end,
+
                 completion = {
                     completeopt = "menu,menuone,preview,noselect",
                 },

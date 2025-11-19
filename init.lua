@@ -116,28 +116,20 @@ local function open_naviterm()
 end
 
 -- CONFIGURACIÓN COPILOT / COPILOT CONFIGURATION --
-local cmp = require("cmp")
-
-sources = cmp.get_config().sources
+vim.g.cmp_enabled = false -- Deshabilita otras fuentes de autocompletado al iniciar Neovim / Disables other autocomplete sources when starting Neovim
 
 local function enable_copilot()
     vim.cmd('Copilot enable')
-    cmp.setup({ sources = {} }) -- Deshabilita otras fuentes de autocompletado al activar Copilot / Disables other autocomplete sources when enabling Copilot
+    vim.g.cmp_enabled = false -- Deshabilita otras fuentes de autocompletado al activar Copilot / Disables other autocomplete sources when enabling Copilot
     print("Copilot enabled")
 end
 
 local function disable_copilot()
     vim.cmd('Copilot disable')
-    cmp.setup({ sources = sources }) -- Habilita las fuentes originales de autocompletado al desactivar Copilot / Enables original autocomplete sources when disabling Copilot
+    vim.g.cmp_enabled = true -- Habilita las fuentes originales de autocompletado al desactivar Copilot / Enables original autocomplete sources when disabling Copilot
     print("Copilot disabled")
 end
 
--- Deshabilita otras fuentes de autocompletado al iniciar Neovim / Disables other autocomplete sources when starting Neovim
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        require("cmp").setup({ sources = {} })
-    end,
-})
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
 -- leader se cambia en lazy.lua
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
