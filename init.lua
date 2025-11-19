@@ -116,17 +116,17 @@ local function open_naviterm()
 end
 
 -- CONFIGURACIÓN COPILOT / COPILOT CONFIGURATION --
-vim.g.cmp_enabled = false -- Deshabilita otras fuentes de autocompletado al iniciar Neovim / Disables other autocomplete sources when starting Neovim
+vim.g.cmp_enabled = false -- Deshabilita la variable global cmp_enabled al iniciar Neovim / Disables the global variable cmp_enabled when starting Neovim
 
 local function enable_copilot()
     vim.cmd('Copilot enable')
-    vim.g.cmp_enabled = false -- Deshabilita otras fuentes de autocompletado al activar Copilot / Disables other autocomplete sources when enabling Copilot
+    vim.g.cmp_enabled = false -- Deshabilita la variable global cmp_enabled al activar Copilot / Disables the global variable cmp_enabled when enabling Copilot
     print("Copilot enabled")
 end
 
 local function disable_copilot()
     vim.cmd('Copilot disable')
-    vim.g.cmp_enabled = true -- Habilita las fuentes originales de autocompletado al desactivar Copilot / Enables original autocomplete sources when disabling Copilot
+    vim.g.cmp_enabled = true -- Habilita la variable global cmp_enabled al desactivar Copilot / Enables the global variable cmp_enabled when disabling Copilot
     print("Copilot disabled")
 end
 

@@ -32,6 +32,7 @@ return {
 
             cmp.setup({
 
+                -- Habilita o deshabilita nvim-cmp en función de la variable global cmp_enabled / Enable or disable nvim-cmp based on the global variable cmp_enabled
                 enabled = function()
                     return vim.g.cmp_enabled
                 end,
