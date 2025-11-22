@@ -5,7 +5,7 @@ return {
             defaults = {
                 hidden = true, -- muestra archivos ocultos predeterminado / show hidden files as a default config
                 file_ignore_patterns = {
-                    "^[^.]+$",
+                    "%.git/",
                     "%.o$",
                     "%.png$",
                     "%.class$",
