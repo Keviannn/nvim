@@ -142,7 +142,7 @@ k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", si
 k.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
 k.set('n', '<leader>h', ':Telescope harpoon marks<CR>', {desc = "Abrir marks de telescope y harpoon / Opens harpoon marks in Telescope", silent = true })
 k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar buffers / Easier to select buffers
-k.set('t', '<C-c>', [[<C-\><C-n>]], { desc = "Sale del modo inserción en terminal / Gets out of insert mode in terminal mode", silent = true })
+k.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = "Sale del modo inserción en terminal / Gets out of insert mode in terminal mode", silent = true })
 k.set('n', '<leader>tw', toggle_terminal_window, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
 k.set('n', '<leader>tt', open_terminal, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
 k.set({'n', 'v', 'i'}, '<Up>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
