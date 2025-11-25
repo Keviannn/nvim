@@ -1,10 +1,10 @@
 return {
     "nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",  -- para actualizar los parsers
+    run = ":TSUpdate",      -- Actualiza lenguajes / Update languajes
     config = function()
         require'nvim-treesitter.configs'.setup {
             highlight = {
-                enable = true,                   -- activar resaltado
+                enable = true,     -- Activa los colores de treesitter / Enables treesitter coloring
                 additional_vim_regex_highlighting = false,
             },
         }
