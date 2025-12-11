@@ -137,7 +137,6 @@ k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos d
 k.set('n', '<leader>l', ':Lazy<CR>', { desc = 'Abre LazyLim / Opens LazyVim', silent = true })
 k.set({'n', 'v'}, ' ', ':', { desc = 'Espacio es ahora : / Change : to space key' })
 k.set('n', '<leader>qq', ':q!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
-k.set('n', '<leader>m', ':Mason<CR>', {desc = 'Abrir Mason / Open Mason', silent = true })
 k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", silent = true })
 k.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
 k.set('n', '<leader>h', ':Telescope harpoon marks<CR>', {desc = "Abrir marks de telescope y harpoon / Opens harpoon marks in Telescope", silent = true })
@@ -151,6 +150,7 @@ k.set({'n', 'v', 'i'}, '<Left>', '<Nop>', { desc = "Impide usar las flechas / Bl
 k.set({'n', 'v', 'i'}, '<Right>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set('n', '<Esc>', ':noh<CR>', { desc = "Esc me quita el highlight de búsqueda / Esc hides search highlight", silent = true })
 k.set('n', '<leader>n', open_naviterm, { desc = "Abrir naviterm / Opens naviterm", silent = true })
+k.set('n', '<leader>m', ':MarkdownPreviewToggle<CR>', { desc = "Abrir/Cerrar previsualización de markdown / Open/Close markdown preview", silent = true })
 
 -- ATAJOS COPILOT / COPILOT SHORTCUTS --
 k.set("n", "<leader>ce", enable_copilot, { desc = "Activar copilot / Enables copilot", noremap = true })
