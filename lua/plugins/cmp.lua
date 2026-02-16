@@ -54,8 +54,10 @@ return {
 
                     -- Salto hacia el siguiente placeholder en snippets / Jumps to next placeholder inside snippets
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
+                        if vim.g.cmp_enabled and cmp.visible() then
                             cmp.select_next_item()
+                        elseif vim.g.cmp_enabled and luasnip.jumpable(1) then
+                            luasnip.jump(1)
                         else
                             fallback()
                         end
