@@ -132,7 +132,7 @@ end
 
 ## Screenshot
 
-Example of real working with this setup for my HPC class in university.
+Example of real working with this setup for the oficial Laravel course.
 
 ![nvim hpc](./example.png)
 
