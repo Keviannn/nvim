@@ -20,14 +20,16 @@ local function toggle_terminal_window()
 
     -- Si no hay buffer de terminal válido, créalo / If there is no valid terminal buffer, create it
     if not term_buf or not api.nvim_buf_is_valid(term_buf) then
-        vim.cmd('botright 10split')
+        vim.cmd('split')
+        vim.cmd('resize 10')
         vim.cmd('terminal')
         term_win = api.nvim_get_current_win()
         term_buf = api.nvim_get_current_buf()
         api.nvim_buf_set_name(term_buf, "Terminal")
     else
         -- Si el buffer existe, simplemente lo volvemos a mostrar / if the buffer exists, just show it again
-        vim.cmd('botright 10split')
+        vim.cmd('split')
+        vim.cmd('resize 10')
         term_win = api.nvim_get_current_win()
         api.nvim_win_set_buf(term_win, term_buf)
     end
@@ -116,7 +118,8 @@ local function open_naviterm()
 end
 
 -- CONFIGURACIÓN COPILOT / COPILOT CONFIGURATION --
-vim.g.cmp_enabled = false -- Deshabilita la variable global cmp_enabled al iniciar Neovim / Disables the global variable cmp_enabled when starting Neovim
+vim.cmd('Copilot disable') -- Deshabilita Copilot al iniciar Neovim / Disables Copilot when starting Neovim
+vim.g.cmp_enabled = true -- Habilita la variable global cmp_enabled al iniciar Neovim / Enables the global variable cmp_enabled when starting Neovim
 
 local function enable_copilot()
     vim.cmd('Copilot enable')
@@ -134,23 +137,25 @@ end
 -- leader se cambia en lazy.lua
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
 k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
+k.set('n', '<leader>fb', ':Telescope file_browser<CR>', { desc = 'Abrir file browser de Telescope / Open Telescope file browser', silent = true})
+k.set('n', '<leader>fh', ':Telescope harpoon marks<CR>', { desc = 'Abrir Telescope harpoon / Open Telescope harpoon', silent = true })
+k.set('n', '<leader>fn', ':Neotree toggle<CR>', { desc = 'Abrir/Cerrar Neotree / Open/Close Neotree', silent = true })
 k.set('n', '<leader>l', ':Lazy<CR>', { desc = 'Abre LazyLim / Opens LazyVim', silent = true })
-k.set({'n', 'v'}, ' ', ':', { desc = 'Espacio es ahora : / Change : to space key' })
-k.set('n', '<leader>qq', ':q!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
+k.set('n', '<leader>qq', ':qa!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
 k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", silent = true })
 k.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
-k.set('n', '<leader>h', ':Telescope harpoon marks<CR>', {desc = "Abrir marks de telescope y harpoon / Opens harpoon marks in Telescope", silent = true })
 k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar buffers / Easier to select buffers
 k.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = "Sale del modo inserción en terminal / Gets out of insert mode in terminal mode", silent = true })
 k.set('n', '<leader>tw', toggle_terminal_window, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
 k.set('n', '<leader>tt', open_terminal, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
-k.set({'n', 'v', 'i'}, '<Up>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
-k.set({'n', 'v', 'i'}, '<Down>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
-k.set({'n', 'v', 'i'}, '<Left>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
-k.set({'n', 'v', 'i'}, '<Right>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
+k.set({'v', 'i'}, '<Up>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
+k.set({'v', 'i'}, '<Down>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
+k.set({'v', 'i'}, '<Left>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
+k.set({'v', 'i'}, '<Right>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set('n', '<Esc>', ':noh<CR>', { desc = "Esc me quita el highlight de búsqueda / Esc hides search highlight", silent = true })
 k.set('n', '<leader>n', open_naviterm, { desc = "Abrir naviterm / Opens naviterm", silent = true })
 k.set('n', '<leader>m', ':MarkdownPreviewToggle<CR>', { desc = "Abrir/Cerrar previsualización de markdown / Open/Close markdown preview", silent = true })
+k.set('n', '<C-a>', 'ggVG', { desc = "Seleccionar todo el texto / Select all text", silent = true })
 
 -- ATAJOS COPILOT / COPILOT SHORTCUTS --
 k.set("n", "<leader>ce", enable_copilot, { desc = "Activar copilot / Enables copilot", noremap = true })
@@ -161,11 +166,11 @@ local dap = require("dap")
 local dapui = require("dapui")
 local dapvt = require("nvim-dap-virtual-text")
 
-k.set("n", "<leader>dt", dap.toggle_breakpoint, { desc = "Toggle Breakpoint", noremap = true, silent = true })
+k.set("n", "<Left>", dap.toggle_breakpoint, { desc = "Toggle Breakpoint", noremap = true, silent = true })
 k.set("n", "<leader>dc", dap.continue, { desc = "Continue", noremap = true, silent = true })
-k.set("n", "<leader>di", dap.step_into, { desc = "Step Into", noremap = true, silent = true })
-k.set("n", "<leader>do", dap.step_over, { desc = "Step Over", noremap = true, silent = true })
-k.set("n", "<leader>du", dap.step_out, { desc = "Step Out", noremap = true, silent = true })
+k.set("n", "<Up>", dap.step_into, { desc = "Step Into", noremap = true, silent = true })
+k.set("n", "<Right>", dap.step_over, { desc = "Step Over", noremap = true, silent = true })
+k.set("n", "<Down>", dap.step_out, { desc = "Step Out", noremap = true, silent = true })
 k.set("n", "<leader>dr", dap.repl.open, { desc = "Open REPL", noremap = true, silent = true })
 k.set("n", "<leader>dl", dap.run_last, { desc = "Run Last", noremap = true, silent = true })
 k.set("n", "<leader>db", dap.list_breakpoints, { desc = "List Breakpoints", noremap = true, silent = true })
