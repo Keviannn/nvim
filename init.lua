@@ -138,7 +138,6 @@ end
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
 k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
 k.set('n', '<leader>fb', ':Telescope file_browser<CR>', { desc = 'Abrir file browser de Telescope / Open Telescope file browser', silent = true})
-k.set('n', '<leader>fh', ':Telescope harpoon marks<CR>', { desc = 'Abrir Telescope harpoon / Open Telescope harpoon', silent = true })
 k.set('n', '<leader>fn', ':Neotree toggle<CR>', { desc = 'Abrir/Cerrar Neotree / Open/Close Neotree', silent = true })
 k.set('n', '<leader>l', ':Lazy<CR>', { desc = 'Abre LazyLim / Opens LazyVim', silent = true })
 k.set('n', '<leader>qq', ':qa!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
