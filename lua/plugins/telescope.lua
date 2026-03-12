@@ -1,8 +1,5 @@
 return {
     "nvim-telescope/telescope.nvim",
-    dependencies = {
-        "nvim-telescope/telescope-file-browser.nvim",
-    },
     config = function()
         require("telescope").setup{
             defaults = {
@@ -26,20 +23,6 @@ return {
                     prompt_title = "Git Files",
                 }
             },
-            extensions = {
-                file_browser = {
-                    hidden = true,
-                    grouped = true,        -- agrupa carpetas arriba
-                    previewer = false,     -- más estilo Vex
-                    layout_strategy = "vertical",
-                    layout_config = {
-                        height = 0.95,
-                        width = 0.6,
-                        prompt_position = "top",
-                    },
-                },
-            },
         }
-        require("telescope").load_extension('file_browser') -- carga la extensión del navegador de archivos / load the file browser extension
     end,
 }
