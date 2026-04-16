@@ -18,7 +18,6 @@ o.showcmd = true            -- Te muestra lo que estas escribiendo en la linea d
 o.showmatch = true          -- Muestra el par correspondiente de ({[]}) / Highlights the other ({[]})
 o.inccommand = "split"      -- Muestra al hacer :s/../.. los cambios que se van a hacer / Preview :s command changes
 o.splitbelow = true         -- Al splitear lo hace debajo / Splits below
-o.mouse = ""                -- Desactiva el ratón en nvim / No mouse functions
 o.wrap = true               -- Hay saltos por longitud de línea / Sepparate long lines
 o.linebreak = true          -- Hace wrap por palabra / Break lines at word boundaries
 o.breakindent = true        -- Mantiene indentación en líneas envueltas / Preserve indentation on wrapped lines

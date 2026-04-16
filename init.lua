@@ -4,6 +4,8 @@ require("user.lazy")
 local k = vim.keymap
 local api = vim.api
 
+vim.g.cmp_enabled = true
+
 -- CONFIGURACIÓN TERMINAL / TERMINAL CONFIGURATION --
 
 -- Variable que almacena el buffer de la terminal (no la ventana) / Variable that stores the terminal buffer (not the window)
@@ -75,62 +77,37 @@ local function open_terminal()
     api.nvim_buf_set_name(term_buf, "Terminal")
 end
 
--- CONFIGURACIÓN NAVITERM / NAVITERM CONFIGURATION --
-local naviterm_buf = nil
-local prev_buf = nil
+-- CONFIGURACIÓN OPENCODE / OPENCODE CONFIGURATION --
+local code_buf = nil
+local code_win = nil
 
-local function open_naviterm()
-
-    -- Tomo el buffer actual / Get the current buffer
-    local in_buf = api.nvim_get_current_buf()
-
-    -- Si el buffer de naviterm existe, es válido... / If the naviterm buffer exists and is valid...
-    if naviterm_buf and api.nvim_buf_is_valid(naviterm_buf) then
-
-        -- ... y es el actual / ...and it is the current buffer
-        if naviterm_buf == in_buf then
-            -- Cambia al buffer previo / Switch to the previous buffer
-            api.nvim_set_current_buf(prev_buf)
-            return
-        end
-
-        -- ... y no es el actual / ... and it is not the current buffer
-
-        -- Actualiza el buffer previo / Update the previous buffer
-        prev_buf = in_buf
-
-        -- Y cambia al buffer de naviterm / And switch to the naviterm buffer
-        api.nvim_set_current_buf(naviterm_buf)
-        vim.cmd('startinsert')
+local function toggle_opencode_window()
+    -- Si la ventana de la terminal sigue abierta, ciérrala (ocúltala) / If the terminal window is still open, close it (hide it)
+    if code_win and api.nvim_win_is_valid(code_win) then
+        api.nvim_win_hide(code_win)
+        code_win = nil
         return
     end
 
-    -- Si el buffer de naviterm no existe o no es válido (Primera iteración) / If the naviterm buffer does not exist or is not valid (first iteration)
+    -- Si no hay buffer de terminal válido, créalo / If there is no valid terminal buffer, create it
+    if not code_buf or not api.nvim_buf_is_valid(code_buf) then
+        vim.cmd('vsplit')
+        vim.cmd('wincmd L')
+        vim.cmd('vertical resize 50')
+        vim.cmd('terminal opencode')
+        code_win = api.nvim_get_current_win()
+        code_buf = api.nvim_get_current_buf()
+        api.nvim_buf_set_name(code_buf, "OpenCode")
+    else
+        -- Si el buffer existe, simplemente lo volvemos a mostrar / if the buffer exists, just show it again
+        vim.cmd('vsplit')
+        vim.cmd('wincmd L')
+        vim.cmd('vertical resize 50')
+        code_win = api.nvim_get_current_win()
+        api.nvim_win_set_buf(code_win, code_buf)
+    end
 
-    -- El buffer actual se convierte en el previo / Set the current buffer as the previous buffer
-    prev_buf = in_buf
-
-    -- Y se llama a naviterm, se setea su id en naviterm_buf y se le da un nombre al buffer / Call naviterm, set its id in naviterm_buf, and give the buffer a name
-    vim.cmd('terminal naviterm')
     vim.cmd('startinsert')
-    naviterm_buf = api.nvim_get_current_buf()
-    api.nvim_buf_set_name(naviterm_buf, "Naviterm")
-end
-
--- CONFIGURACIÓN COPILOT / COPILOT CONFIGURATION --
-vim.cmd('Copilot disable') -- Deshabilita Copilot al iniciar Neovim / Disables Copilot when starting Neovim
-vim.g.cmp_enabled = true -- Habilita la variable global cmp_enabled al iniciar Neovim / Enables the global variable cmp_enabled when starting Neovim
-
-local function enable_copilot()
-    vim.cmd('Copilot enable')
-    vim.g.cmp_enabled = false -- Deshabilita la variable global cmp_enabled al activar Copilot / Disables the global variable cmp_enabled when enabling Copilot
-    print("Copilot enabled")
-end
-
-local function disable_copilot()
-    vim.cmd('Copilot disable')
-    vim.g.cmp_enabled = true -- Habilita la variable global cmp_enabled al desactivar Copilot / Enables the global variable cmp_enabled when disabling Copilot
-    print("Copilot disabled")
 end
 
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
@@ -152,13 +129,9 @@ k.set({'v', 'i'}, '<Down>', '<Nop>', { desc = "Impide usar las flechas / Blocks 
 k.set({'v', 'i'}, '<Left>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set({'v', 'i'}, '<Right>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set('n', '<Esc>', ':noh<CR>', { desc = "Esc me quita el highlight de búsqueda / Esc hides search highlight", silent = true })
-k.set('n', '<leader>n', open_naviterm, { desc = "Abrir naviterm / Opens naviterm", silent = true })
+k.set('n', '<leader>o', toggle_opencode_window, { desc = "Abrir opencode / Opens opencode", silent = true })
 k.set('n', '<leader>m', ':MarkdownPreviewToggle<CR>', { desc = "Abrir/Cerrar previsualización de markdown / Open/Close markdown preview", silent = true })
 k.set('n', '<C-a>', 'ggVG', { desc = "Seleccionar todo el texto / Select all text", silent = true })
-
--- ATAJOS COPILOT / COPILOT SHORTCUTS --
-k.set("n", "<leader>ce", enable_copilot, { desc = "Activar copilot / Enables copilot", noremap = true })
-k.set("n", "<leader>cd", disable_copilot, { desc = "Desactivar copilot / Disable copilot", noremap = true})
 
 -- ATAJOS DEBUGGER / DEBUGGER SHORTCUTS --
 local dap = require("dap")
