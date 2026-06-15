@@ -25,3 +25,4 @@ o.sidescroll = 5            -- Desplazamiento durante movimiento horizontal / Ho
 o.sidescrolloff = 5         -- Espacio antes del final de la línea / Space before the end of the line
 o.scrolloff = 5             -- Espacio antes del final de la ventana / Space before the end of the window    
 --o.linebreak = true        -- Los saltos en funcion de el tamaño de la ventana son en función de espacios y linebreak / Line jumps because of window size are because of spaces and linebreaks
+o.mouse=""                  -- Quita el ratón / Disables mouse 
