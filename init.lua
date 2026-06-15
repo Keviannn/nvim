@@ -77,15 +77,53 @@ local function open_terminal()
     api.nvim_buf_set_name(term_buf, "Terminal")
 end
 
+-- Activa ratón / enables mouse
+local function enable_mouse()
+    vim.opt.mouse = "a"
+end
+
+-- Desactiva ratón / disables mouse 
+local function disable_mouse()
+    vim.opt.mouse = ""
+end
+
 -- CONFIGURACIÓN OPENCODE / OPENCODE CONFIGURATION --
 local code_buf = nil
 local code_win = nil
+
+-- Autocomando: al entrar a la ventana de OpenCode, activar mouse y modo insertar
+-- Autocommand: on opencode, enable mouse and put insert mode
+vim.api.nvim_create_autocmd("WinEnter", {
+    callback = function()
+        if code_win and vim.api.nvim_win_is_valid(code_win) then
+            local current_win = vim.api.nvim_get_current_win()
+            if current_win == code_win then
+                enable_mouse()
+                vim.cmd('startinsert')
+            end
+        end
+    end,
+})
+
+-- Autocomando: al salir de la ventana de OpenCode, desactivar mouse
+-- Autocommand: out of opencode, disable mouse
+vim.api.nvim_create_autocmd("WinLeave", {
+    callback = function()
+        if code_win and vim.api.nvim_win_is_valid(code_win) then
+            local left_win = vim.api.nvim_get_current_win() -- la ventana a la que se sale
+            if left_win == code_win then
+                disable_mouse()
+            end
+        end
+    end,
+})
 
 local function toggle_opencode_window()
     -- Si la ventana de la terminal sigue abierta, ciérrala (ocúltala) / If the terminal window is still open, close it (hide it)
     if code_win and api.nvim_win_is_valid(code_win) then
         api.nvim_win_hide(code_win)
         code_win = nil
+        disable_mouse()
         return
     end
 
@@ -98,6 +136,8 @@ local function toggle_opencode_window()
         code_win = api.nvim_get_current_win()
         code_buf = api.nvim_get_current_buf()
         api.nvim_buf_set_name(code_buf, "OpenCode")
+        enable_mouse()
+        api.nvim_win_set_option(code_win, 'winfixwidth', true) -- Fixed width
     else
         -- Si el buffer existe, simplemente lo volvemos a mostrar / if the buffer exists, just show it again
         vim.cmd('vsplit')
@@ -105,6 +145,8 @@ local function toggle_opencode_window()
         vim.cmd('vertical resize 50')
         code_win = api.nvim_get_current_win()
         api.nvim_win_set_buf(code_win, code_buf)
+        enable_mouse()
+        api.nvim_win_set_option(code_win, 'winfixwidth', true)
     end
 
     vim.cmd('startinsert')
@@ -121,7 +163,7 @@ k.set('n', '<leader>qq', ':qa!<CR>', {desc = 'Cerrar sin guardar más fácil / C
 k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", silent = true })
 k.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
 k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar buffers / Easier to select buffers
-k.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = "Sale del modo inserción en terminal / Gets out of insert mode in terminal mode", silent = true })
+k.set('t', '<Esc>qt', [[<C-\><C-n><C-w>p<CR>]], { desc = "Sale del modo inserción en terminal y va al último buffer / Gets out of insert mode in terminal mode and goes to last buffer", silent = true })
 k.set('n', '<leader>tw', toggle_terminal_window, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
 k.set('n', '<leader>tt', open_terminal, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
 k.set({'v', 'i'}, '<Up>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
