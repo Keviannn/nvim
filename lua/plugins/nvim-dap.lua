@@ -70,8 +70,7 @@ return
         dap.configurations.cpp = dap.configurations.c
 
         ui.setup({
-            layouts = { {
-
+            layouts = { 
                 -- Panel izquierdo / Left panel
                 elements = {
                     { id = "scopes", size = 0.40 },
@@ -85,14 +84,13 @@ return
                 -- Panel derecho / Right panel
                 {
                     elements = {
-                        --{ id = "repl", size = 0.6 }, -- No uso REPL de momento / I do not use REPL right now
-                        { id = "console", size = 1 },
+                        { id = "repl", size = 0.7}, -- No uso REPL de momento / I do not use REPL right now
+                        { id = "console", size = 0.3 },
                     },
                     size = 12,
                     position = "bottom",
                 },
-            },
-        })
+            })
 
         vim.fn.sign_define("DapBreakpoint", { text = "🪦" })
 

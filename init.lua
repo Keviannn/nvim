@@ -27,7 +27,9 @@ local function toggle_terminal_window()
         vim.cmd('terminal')
         term_win = api.nvim_get_current_win()
         term_buf = api.nvim_get_current_buf()
-        api.nvim_buf_set_name(term_buf, "Terminal")
+        api.nvim_buf_set_name(term_buf, "Shell")
+        vim.b.display_name = "Term"
+        vim.b.buffer_icon = ""
     else
         -- Si el buffer existe, simplemente lo volvemos a mostrar / if the buffer exists, just show it again
         vim.cmd('split')
@@ -74,7 +76,9 @@ local function open_terminal()
     vim.cmd('terminal')
     vim.cmd('startinsert')
     term_buf = api.nvim_get_current_buf()
-    api.nvim_buf_set_name(term_buf, "Terminal")
+    api.nvim_buf_set_name(term_buf, "Shell")
+    vim.b.display_name = "Term"
+    vim.b.buffer_icon = ""
 end
 
 -- Activa ratón / enables mouse
@@ -118,62 +122,99 @@ vim.api.nvim_create_autocmd("WinLeave", {
     end,
 })
 
-local function toggle_opencode_window()
-    -- Si la ventana de la terminal sigue abierta, ciérrala (ocúltala) / If the terminal window is still open, close it (hide it)
-    if code_win and api.nvim_win_is_valid(code_win) then
-        api.nvim_win_hide(code_win)
-        code_win = nil
-        disable_mouse()
+local function open_opencode()
+
+    -- Tomo el buffer actual / Get the current buffer
+    local in_buf = api.nvim_get_current_buf()
+
+    -- Si el buffer de la terminal existe, es válido... / If the terminal buffer exists and is valid...
+    if code_buf and api.nvim_buf_is_valid(code_buf) then
+
+        -- ... y es el actual / ...and it is the current buffer
+        if code_buf == in_buf then
+            -- Cambia al buffer previo / Switch to the previous buffer
+            api.nvim_set_current_buf(prev_buf)
+            disable_mouse()
+            return
+        end
+
+        -- ... y no es el actual / ... and it is not the current buffer
+
+        -- Actualiza el buffer previo / Update the previous buffer
+        prev_buf = in_buf
+
+        -- Y cambia al buffer de la terminal / And switch to the terminal buffer
+        api.nvim_set_current_buf(code_buf)
+        vim.cmd('startinsert')
+        enable_mouse()
         return
     end
 
-    -- Si no hay buffer de terminal válido, créalo / If there is no valid terminal buffer, create it
-    if not code_buf or not api.nvim_buf_is_valid(code_buf) then
-        vim.cmd('vsplit')
-        vim.cmd('wincmd L')
-        vim.cmd('vertical resize 50')
-        vim.cmd('terminal opencode')
-        code_win = api.nvim_get_current_win()
-        code_buf = api.nvim_get_current_buf()
-        api.nvim_buf_set_name(code_buf, "OpenCode")
-        enable_mouse()
-        api.nvim_win_set_option(code_win, 'winfixwidth', true) -- Fixed width
-    else
-        -- Si el buffer existe, simplemente lo volvemos a mostrar / if the buffer exists, just show it again
-        vim.cmd('vsplit')
-        vim.cmd('wincmd L')
-        vim.cmd('vertical resize 50')
-        code_win = api.nvim_get_current_win()
-        api.nvim_win_set_buf(code_win, code_buf)
-        enable_mouse()
-        api.nvim_win_set_option(code_win, 'winfixwidth', true)
-    end
+    -- Si el buffer de la terminal no existe o no es válido (Primera iteración) / If the terminal buffer does not exist or is not valid (first iteration)
 
+    -- El buffer actual se convierte en el previo / Set the current buffer as the previous buffer
+    prev_buf = in_buf
+
+    -- Y se llama a la terminal, se setea su id en term_buf y se le da un nombre al buffer / Call terminal, set its id in term_buf, and give the buffer a name
+    vim.cmd('terminal opencode')
     vim.cmd('startinsert')
+    code_buf = api.nvim_get_current_buf()
+    enable_mouse()
+    vim.api.nvim_buf_set_name(code_buf, "OpenCode")
+    vim.b.display_name = "OpenCode"
+    vim.b.buffer_icon = "󰚩"
+    pcall(function() require("bufferline").update() end)
 end
 
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
--- leader se cambia en lazy.lua
+
+-- Telescope
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
 k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
 k.set('n', '<leader>fb', ':Telescope file_browser<CR>', { desc = 'Abrir file browser de Telescope / Open Telescope file browser', silent = true})
+
+-- Other plugins
 k.set('n', '<leader>fn', ':Neotree toggle<CR>', { desc = 'Abrir/Cerrar Neotree / Open/Close Neotree', silent = true })
 k.set('n', '<leader>l', ':Lazy<CR>', { desc = 'Abre LazyLim / Opens LazyVim', silent = true })
-k.set('n', '<leader>qq', ':qa!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
-k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", silent = true })
 k.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
-k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar buffers / Easier to select buffers
-k.set('t', '<Esc>qt', [[<C-\><C-n><C-w>p<CR>]], { desc = "Sale del modo inserción en terminal y va al último buffer / Gets out of insert mode in terminal mode and goes to last buffer", silent = true })
+
+k.set('n', '<leader>mp', ':BufferLineMoveNext<CR>', { desc = "Mover buffer adelante / Move buffer to nex pos ", silent = true })
+k.set('n', '<leader>mp', ':BufferLineMovePrev<CR>', { desc = "Mover buffer atras / Move buffer to prev pos", silent = true })
+
+-- Terminal related
 k.set('n', '<leader>tw', toggle_terminal_window, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
 k.set('n', '<leader>tt', open_terminal, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
+k.set('n', '<leader>nt', function()
+    vim.cmd('terminal')
+    vim.cmd('startinsert')
+    vim.api.nvim_buf_set_name(code_buf, "Shell")
+    vim.b.display_name = "Bash"
+    vim.b.buffer_icon = ""
+end, { desc = "Abrir una nueva terminal / Open a new terminal", silent = true })
+k.set('t', '<Esc>qt', [[<C-\><C-n><C-w>p<CR>]], { desc = "Sale del modo inserción en terminal y va al último buffer / Gets out of insert mode in terminal mode and goes to last buffer", silent = true })
+k.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = "Sale del modo inserción en terminal / Gets out of insert mode in terminal", silent = true})
+k.set('t', '<Esc>lt', function()
+    vim.cmd('stopinsert')
+    toggle_terminal_window()
+end, { desc = "Sale de la terminal / Gets out of the terminal", silent = true})
+k.set('n', '<leader>o', open_opencode, { desc = "Abrir opencode / Opens opencode", silent = true })
+
+-- Control related
 k.set({'v', 'i'}, '<Up>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set({'v', 'i'}, '<Down>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set({'v', 'i'}, '<Left>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set({'v', 'i'}, '<Right>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
 k.set('n', '<Esc>', ':noh<CR>', { desc = "Esc me quita el highlight de búsqueda / Esc hides search highlight", silent = true })
-k.set('n', '<leader>o', toggle_opencode_window, { desc = "Abrir opencode / Opens opencode", silent = true })
-k.set('n', '<leader>m', ':MarkdownPreviewToggle<CR>', { desc = "Abrir/Cerrar previsualización de markdown / Open/Close markdown preview", silent = true })
 k.set('n', '<C-a>', 'ggVG', { desc = "Seleccionar todo el texto / Select all text", silent = true })
+k.set('n', '<leader>qq', ':qa!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
+k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", silent = true })
+k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar buffers / Easier to select buffers
+
+-- LSP related
+k.set('n', 'gd', vim.lsp.buf.definition, { })
+k.set('n', 'gi', vim.lsp.buf.implementation, { })
+k.set('n', 'K', vim.lsp.buf.hover, { })
+k.set('n', 'gr', vim.lsp.buf.references, { })
 
 -- ATAJOS DEBUGGER / DEBUGGER SHORTCUTS --
 local dap = require("dap")

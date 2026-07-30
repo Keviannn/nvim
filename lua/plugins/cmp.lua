@@ -38,7 +38,7 @@ return {
                 end,
 
                 completion = {
-                    completeopt = "menu,menuone,preview,noselect",
+                    completeopt = "menu,menuone,preview",
                 },
 
                 snippet = {
@@ -58,6 +58,17 @@ return {
                             cmp.select_next_item()
                         elseif vim.g.cmp_enabled and luasnip.jumpable(1) then
                             luasnip.jump(1)
+                        else
+                            fallback()
+                        end
+                    end, { "i", "s" }),
+
+                    -- Salto hacia el placeholder anterior (Shift+Tab)
+                    ["<S-Tab>"] = cmp.mapping(function(fallback)
+                        if vim.g.cmp_enabled and cmp.visible() then
+                            cmp.select_prev_item()  -- Mueve hacia arriba en el menú de autocompletado
+                        elseif vim.g.cmp_enabled and luasnip.jumpable(-1) then
+                            luasnip.jump(-1)        -- Salta al placeholder anterior
                         else
                             fallback()
                         end
