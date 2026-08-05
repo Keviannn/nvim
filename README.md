@@ -24,13 +24,21 @@ This setup includes a variety of plugins configured to enhance productivity:
 - **harpoon**: efficiently manages open buffers for quick navigation.
 - **indent-blankline**: visualizes indentation with a custom character.
 - **mason, mason-lspconfig, nvim-lspconfig**: install and integrate lsps for various languages.
-- **nvim-dap**: provides a visual debugging environment for multiple languages.
+- **nvim-dap, nvim-dap-ui, nvim-dap-go**: provides a visual debugging environment for multiple languages (with dap-go and a ui).
+- **nvim-dap-virtual-text, mason-nvim-dap**: shows inline values during debugging and lets mason install debuggers.
 - **telescope**: file search with live preview.
 - **treesitter**: syntax parsing and highlighting.
-- **cpm**: autocompletion engine supporting dictionaries, snippets, and lsps.
+- **cmp (nvim-cmp)**: autocompletion engine supporting dictionaries, snippets, and lsps.
 - **lualine**: modern, customizable status line replacing the default one.
+- **bufferline**: tabline with open buffers, styled like a tab bar.
+- **neo-tree**: file explorer with grouping of empty directories.
+- **nvim-web-devicons**: filetype icons for lualine, telescope, and other plugins.
+- **markdown-preview**: live preview for markdown files in the browser.
+- **nvim-ts-autotag**: automatically closes and renames html-like tags.
+- **vim-smoothie**: smooth scrolling for `j`, `k`, and `Ctrl-D/U`.
+- **plenary**: utility library used by other plugins.
 
-All plugins and related keybinds have been configured to fit my workflow and are present and explained in [init.lua](./init.lua).
+All plugins and related keybinds have been configured to fit my workflow and are present and explained in [init.lua](./init.lua) and the [plugins](./lua/plugins) folder.
 
 ---
 
@@ -71,49 +79,32 @@ local function toggle_terminal_window()
 end
 ```
 
-### open_naviterm
+### open_something
 
-This function does almost the same as toggle_terminal but is an integration with [naviterm](https://gitlab.com/detoxify92/naviterm).
+This function asks for a program name and opens it in a terminal, giving the buffer a proper title.
 
 ``` lua
--- CONFIGURACIÓN NAVITERM / NAVITERM CONFIGURATION --
-local naviterm_buf = nil
-local prev_buf = nil
-
-local function open_naviterm()
-
-    -- Tomo el buffer actual / Get the current buffer
-    local in_buf = api.nvim_get_current_buf()
-
-    -- Si el buffer de naviterm existe, es válido... / If the naviterm buffer exists and is valid...
-    if naviterm_buf and api.nvim_buf_is_valid(naviterm_buf) then
-
-        -- ... y es el actual / ...and it is the current buffer
-        if naviterm_buf == in_buf then
-            -- Cambia al buffer previo / Switch to the previous buffer
-            api.nvim_set_current_buf(prev_buf)
-            return
-        end
-
-        -- ... y no es el actual / ... and it is not the current buffer
-
-        -- Actualiza el buffer previo / Update the previous buffer
-        prev_buf = in_buf
-
-        -- Y cambia al buffer de naviterm / And switch to the naviterm buffer
-        api.nvim_set_current_buf(naviterm_buf)
+local function open_something()
+    local cmd = vim.fn.input("Select your program: ")
+    if cmd == "" then
+        vim.print("")
         return
     end
 
-    -- Si el buffer de naviterm no existe o no es válido (Primera iteración) / If the naviterm buffer does not exist or is not valid (first iteration)
+    vim.cmd('terminal ' ..  cmd)
+    vim.cmd('startinsert')
+    local in_buf = api.nvim_get_current_buf()
 
-    -- El buffer actual se convierte en el previo / Set the current buffer as the previous buffer
-    prev_buf = in_buf
-
-    -- Y se llama a naviterm, se setea su id en naviterm_buf y se le da un nombre al buffer / Call naviterm, set its id in naviterm_buf, and give the buffer a name
-    vim.cmd('terminal naviterm')
-    naviterm_buf = api.nvim_get_current_buf()
-    api.nvim_buf_set_name(naviterm_buf, "Naviterm")
+    local parts = vim.split(cmd, " ")
+    local title
+    if #parts > 1 then
+        title = parts[2]:sub(1,1):upper() .. parts[2]:sub(2)
+    else
+        title = parts[1]:sub(1,1):upper() .. parts[1]:sub(2)
+    end
+    vim.b.display_name = title
+    vim.b.command = parts[1]
+    vim.opt.mouse = "a"
 end
 ```
 
