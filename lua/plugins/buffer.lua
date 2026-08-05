@@ -38,7 +38,7 @@ return {
                     return "󰱠", "DevIcon7z"
                 elseif command == "htop" then
                     return "", "DevIconPackageJson"
-                elseif command == "bash" or command == "Term" then
+                elseif command == "bash" then
                     return "", "DevIconTerminal"
                 elseif command == "codex" or command == "opencode" then
                     return "󰚩", "DevIconHxx"

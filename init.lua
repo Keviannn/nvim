@@ -28,6 +28,7 @@ local function toggle_terminal_window()
         term_win = api.nvim_get_current_win()
         term_buf = api.nvim_get_current_buf()
         vim.b.display_name = "Term"
+        vim.b.command = "bash" 
         vim.b.buffer_icon = ""
     else
         -- Si el buffer existe, simplemente lo volvemos a mostrar / if the buffer exists, just show it again
