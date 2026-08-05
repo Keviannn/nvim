@@ -27,7 +27,6 @@ local function toggle_terminal_window()
         vim.cmd('terminal')
         term_win = api.nvim_get_current_win()
         term_buf = api.nvim_get_current_buf()
-        api.nvim_buf_set_name(term_buf, "Shell")
         vim.b.display_name = "Term"
         vim.b.buffer_icon = ""
     else
@@ -76,94 +75,44 @@ local function open_terminal()
     vim.cmd('terminal')
     vim.cmd('startinsert')
     term_buf = api.nvim_get_current_buf()
-    api.nvim_buf_set_name(term_buf, "Shell")
     vim.b.display_name = "Term"
+    vim.b.command = "bash" 
     vim.b.buffer_icon = ""
 end
 
--- Activa ratón / enables mouse
-local function enable_mouse()
-    vim.opt.mouse = "a"
-end
-
--- Desactiva ratón / disables mouse 
-local function disable_mouse()
-    vim.opt.mouse = ""
-end
-
--- CONFIGURACIÓN OPENCODE / OPENCODE CONFIGURATION --
-local code_buf = nil
-local code_win = nil
-
--- Autocomando: al entrar a la ventana de OpenCode, activar mouse y modo insertar
--- Autocommand: on opencode, enable mouse and put insert mode
-vim.api.nvim_create_autocmd("WinEnter", {
+local mouse_augroup = api.nvim_create_augroup("TerminalMouse", { clear = true })
+api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+    group = mouse_augroup,
     callback = function()
-        if code_win and vim.api.nvim_win_is_valid(code_win) then
-            local current_win = vim.api.nvim_get_current_win()
-            if current_win == code_win then
-                enable_mouse()
-                vim.cmd('startinsert')
-            end
+        if vim.bo.buftype == "terminal" then
+            vim.opt.mouse = "a"
+        else
+            vim.opt.mouse = ""
         end
-    end,
+    end
 })
 
--- Autocomando: al salir de la ventana de OpenCode, desactivar mouse
--- Autocommand: out of opencode, disable mouse
-vim.api.nvim_create_autocmd("WinLeave", {
-    callback = function()
-        if code_win and vim.api.nvim_win_is_valid(code_win) then
-            local left_win = vim.api.nvim_get_current_win() -- la ventana a la que se sale
-            if left_win == code_win then
-                disable_mouse()
-            end
-        end
-    end,
-})
-
-local function open_opencode()
-
-    -- Tomo el buffer actual / Get the current buffer
-    local in_buf = api.nvim_get_current_buf()
-
-    -- Si el buffer de la terminal existe, es válido... / If the terminal buffer exists and is valid...
-    if code_buf and api.nvim_buf_is_valid(code_buf) then
-
-        -- ... y es el actual / ...and it is the current buffer
-        if code_buf == in_buf then
-            -- Cambia al buffer previo / Switch to the previous buffer
-            api.nvim_set_current_buf(prev_buf)
-            disable_mouse()
-            return
-        end
-
-        -- ... y no es el actual / ... and it is not the current buffer
-
-        -- Actualiza el buffer previo / Update the previous buffer
-        prev_buf = in_buf
-
-        -- Y cambia al buffer de la terminal / And switch to the terminal buffer
-        api.nvim_set_current_buf(code_buf)
-        vim.cmd('startinsert')
-        enable_mouse()
+local function open_something()
+    local cmd = vim.fn.input("Select your program: ")
+    if cmd == "" then
+        vim.print("")
         return
     end
 
-    -- Si el buffer de la terminal no existe o no es válido (Primera iteración) / If the terminal buffer does not exist or is not valid (first iteration)
-
-    -- El buffer actual se convierte en el previo / Set the current buffer as the previous buffer
-    prev_buf = in_buf
-
-    -- Y se llama a la terminal, se setea su id en term_buf y se le da un nombre al buffer / Call terminal, set its id in term_buf, and give the buffer a name
-    vim.cmd('terminal opencode')
+    vim.cmd('terminal ' ..  cmd)
     vim.cmd('startinsert')
-    code_buf = api.nvim_get_current_buf()
-    enable_mouse()
-    vim.api.nvim_buf_set_name(code_buf, "OpenCode")
-    vim.b.display_name = "OpenCode"
-    vim.b.buffer_icon = "󰚩"
-    pcall(function() require("bufferline").update() end)
+    local in_buf = api.nvim_get_current_buf()
+
+    local parts = vim.split(cmd, " ")
+    local title
+    if #parts > 1 then
+        title = parts[2]:sub(1,1):upper() .. parts[2]:sub(2)
+    else
+        title = parts[1]:sub(1,1):upper() .. parts[1]:sub(2)
+    end
+    vim.b.display_name = title
+    vim.b.command = parts[1]
+    vim.opt.mouse = "a"
 end
 
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
@@ -171,14 +120,16 @@ end
 -- Telescope
 k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
 k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
-k.set('n', '<leader>fb', ':Telescope file_browser<CR>', { desc = 'Abrir file browser de Telescope / Open Telescope file browser', silent = true})
+k.set('n', '<leader>ft', ':Telescope live_grep<CR>', { desc = 'Buscar archivos por su texto/ Find files by text', silent = true})
+
+-- Markdown
+vim.keymap.set("n", "<leader>md", ":MarkdownPreview<CR>", { desc = "Markdown: Start preview" })
 
 -- Other plugins
 k.set('n', '<leader>fn', ':Neotree toggle<CR>', { desc = 'Abrir/Cerrar Neotree / Open/Close Neotree', silent = true })
 k.set('n', '<leader>l', ':Lazy<CR>', { desc = 'Abre LazyLim / Opens LazyVim', silent = true })
-k.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
 
-k.set('n', '<leader>mp', ':BufferLineMoveNext<CR>', { desc = "Mover buffer adelante / Move buffer to nex pos ", silent = true })
+k.set('n', '<leader>mn', ':BufferLineMoveNext<CR>', { desc = "Mover buffer adelante / Move buffer to nex pos ", silent = true })
 k.set('n', '<leader>mp', ':BufferLineMovePrev<CR>', { desc = "Mover buffer atras / Move buffer to prev pos", silent = true })
 
 -- Terminal related
@@ -187,9 +138,9 @@ k.set('n', '<leader>tt', open_terminal, { desc = "Abrir/Cerrar la terminal / Ope
 k.set('n', '<leader>nt', function()
     vim.cmd('terminal')
     vim.cmd('startinsert')
-    vim.api.nvim_buf_set_name(code_buf, "Shell")
+    buf = api.nvim_get_current_buf()
+    vim.b.command = "bash"
     vim.b.display_name = "Bash"
-    vim.b.buffer_icon = ""
 end, { desc = "Abrir una nueva terminal / Open a new terminal", silent = true })
 k.set('t', '<Esc>qt', [[<C-\><C-n><C-w>p<CR>]], { desc = "Sale del modo inserción en terminal y va al último buffer / Gets out of insert mode in terminal mode and goes to last buffer", silent = true })
 k.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = "Sale del modo inserción en terminal / Gets out of insert mode in terminal", silent = true})
@@ -197,7 +148,8 @@ k.set('t', '<Esc>lt', function()
     vim.cmd('stopinsert')
     toggle_terminal_window()
 end, { desc = "Sale de la terminal / Gets out of the terminal", silent = true})
-k.set('n', '<leader>o', open_opencode, { desc = "Abrir opencode / Opens opencode", silent = true })
+k.set('n', '<leader>r', open_something, { desc = "Abrir algo / Opens something", silent = true })
+
 
 -- Control related
 k.set({'v', 'i'}, '<Up>', '<Nop>', { desc = "Impide usar las flechas / Blocks arrows" })
@@ -208,13 +160,15 @@ k.set('n', '<Esc>', ':noh<CR>', { desc = "Esc me quita el highlight de búsqueda
 k.set('n', '<C-a>', 'ggVG', { desc = "Seleccionar todo el texto / Select all text", silent = true })
 k.set('n', '<leader>qq', ':qa!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
 k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", silent = true })
-k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar buffers / Easier to select buffers
+k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar registros / Easier to select registers
+k.set('n', '<leader>bd', ':bp | bd #<CR>', { desc = "Cerrar un buffer mueve al anterior antes / Closing a buffer moves to the latest buffer first", silent = true })
 
 -- LSP related
-k.set('n', 'gd', vim.lsp.buf.definition, { })
-k.set('n', 'gi', vim.lsp.buf.implementation, { })
-k.set('n', 'K', vim.lsp.buf.hover, { })
-k.set('n', 'gr', vim.lsp.buf.references, { })
+k.set('n', '<leader>le', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
+k.set('n', '<leader>ld', vim.lsp.buf.definition, { })
+k.set('n', '<leader>li', vim.lsp.buf.implementation, { })
+k.set('n', '<leader>ls', vim.lsp.buf.hover, { })
+k.set('n', '<leader>lr', vim.lsp.buf.references, { })
 
 -- ATAJOS DEBUGGER / DEBUGGER SHORTCUTS --
 local dap = require("dap")

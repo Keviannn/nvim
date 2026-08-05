@@ -27,19 +27,21 @@ return {
             end,
 
             get_element_icon = function(element)
-                -- Obtenemos el número de buffer a partir de su path
                 local bufnr = vim.fn.bufnr(element.path)
+                local name, command
 
-                -- Comprobamos si existe la variable buffer_icon en ese buffer
-                local icon = vim.b[bufnr].buffer_icon
-                local name = vim.b[bufnr].display_name
-                if icon then
-                    if name == "Bash" or name == "Term" then
-                        return icon, "DevIconTerminal"
-                    end
-                    if name == "OpenCode" then
-                        return icon, "DevIconHxx"
-                    end
+                if element.path ~= "" and bufnr > 0 then
+                    command = vim.b[bufnr].command
+                end
+
+                if command == "ssh" then
+                    return "󰱠", "DevIcon7z"
+                elseif command == "htop" then
+                    return "", "DevIconPackageJson"
+                elseif command == "bash" or command == "Term" then
+                    return "", "DevIconTerminal"
+                elseif command == "codex" or command == "opencode" then
+                    return "󰚩", "DevIconHxx"
                 end
 
                 -- Si no hay icono personalizado, usar el icono por defecto
