@@ -118,10 +118,13 @@ end
 
 -- ATAJOS CUSTOM / CUSTOM SHORTCUTS --
 
--- Telescope
-k.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = 'Buscar archivos con Telescope / Find file with Telescope', silent = true})
-k.set('n', '<leader>fg', ':Telescope git_files<CR>', { desc = 'Buscar archivos de git con Telescope / Find git files with Telescope', silent = true})
-k.set('n', '<leader>ft', ':Telescope live_grep<CR>', { desc = 'Buscar archivos por su texto/ Find files by text', silent = true})
+-- Finder
+k.set('n', '<leader>ff', ':FzfLua files<CR>', { desc = 'Buscar archivos con FzfLua / Find file with FzfLua', silent = true})
+k.set('n', '<leader>fg', ':FzfLua git_files<CR>', { desc = 'Buscar archivos de git con FzfLua / Find git files with FzfLua', silent = true})
+k.set('n', '<leader>fb', ':FzfLua buffers<CR>', { desc = '', silent = true})
+k.set('n', '<leader>fr', ':FzfLua grep<CR>', { desc = 'Buscar archivos por su texto/ Find files by text', silent = true})
+k.set('n', '<leader>fw', ':FzfLua grep_cword<CR>', { desc = '', silent = true})
+k.set({'n', 'v'}, '<leader>fv', ':FzfLua grep_visual<CR>', { desc = '', silent = true})
 
 -- Markdown
 vim.keymap.set("n", "<leader>md", ":MarkdownPreview<CR>", { desc = "Markdown: Start preview" })
@@ -129,9 +132,6 @@ vim.keymap.set("n", "<leader>md", ":MarkdownPreview<CR>", { desc = "Markdown: St
 -- Other plugins
 k.set('n', '<leader>fn', ':Neotree toggle<CR>', { desc = 'Abrir/Cerrar Neotree / Open/Close Neotree', silent = true })
 k.set('n', '<leader>l', ':Lazy<CR>', { desc = 'Abre LazyLim / Opens LazyVim', silent = true })
-
-k.set('n', '<leader>mn', ':BufferLineMoveNext<CR>', { desc = "Mover buffer adelante / Move buffer to nex pos ", silent = true })
-k.set('n', '<leader>mp', ':BufferLineMovePrev<CR>', { desc = "Mover buffer atras / Move buffer to prev pos", silent = true })
 
 -- Terminal related
 k.set('n', '<leader>tw', toggle_terminal_window, { desc = "Abrir/Cerrar la terminal / Open/Close terminal", silent = true })
@@ -162,7 +162,12 @@ k.set('n', '<C-a>', 'ggVG', { desc = "Seleccionar todo el texto / Select all tex
 k.set('n', '<leader>qq', ':qa!<CR>', {desc = 'Cerrar sin guardar más fácil / Close easier without saving', silent = true })
 k.set('n', '<leader>w', '<C-w>', {desc = "Cambiar ventanas / Change windows", silent = true })
 k.set({'v','n'}, 'á', '"', { desc = "Cambia la combinacion para poner comillas con á / Changes the \" combination with á", silent = true }) -- Más fácil seleccionar registros / Easier to select registers
-k.set('n', '<leader>bd', ':bp | bd #<CR>', { desc = "Cerrar un buffer mueve al anterior antes / Closing a buffer moves to the latest buffer first", silent = true })
+
+k.set('n', '<leader><Tab>', ':tabnew<CR>', {desc = "", silent = true })
+k.set('n', '<Tab>', ':tabnext<CR>', {desc = "", silent = true })
+k.set('n', '<S-Tab>', ':tabprev<CR>', {desc = "", silent = true })
+k.set('n', '<A-h>', ':bprev<CR>', {desc = "", silent = true })
+k.set('n', '<A-l>', ':bnext<CR>', {desc = "", silent = true })
 
 -- LSP related
 k.set('n', '<leader>le', vim.diagnostic.open_float, { desc = "Enseñar errores del LSP / Show LSP errors", silent = true  })
