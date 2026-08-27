@@ -16,6 +16,14 @@ return {
                 changedelete = { text = 'b' },
                 untracked    = { text = '|' },
             },
+            signs_staged = {
+                add          = { text = '+' },
+                change       = { text = '~' },
+                delete       = { text = '⌄' },
+                topdelete    = { text = '⌃' },
+                changedelete = { text = 'b' },
+                untracked    = { text = '|' },
+            },
         })
     end,
 }
