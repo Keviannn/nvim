@@ -72,14 +72,16 @@ return
         ui.setup({
             layouts = { 
                 -- Panel izquierdo / Left panel
-                elements = {
-                    { id = "scopes", size = 0.40 },
-                    { id = "breakpoints", size = 0.30 },
-                    { id = "stacks", size = 0.30 },
-                    --{ id = "watches", size = 0.20}, -- No uso watches de momento / I do not use watches right now
+                {
+                    elements = {
+                        { id = "scopes", size = 0.40 },
+                        { id = "breakpoints", size = 0.30 },
+                        { id = "stacks", size = 0.30 },
+                        --{ id = "watches", size = 0.20}, -- No uso watches de momento / I do not use watches right now
+                    },
+                    size = 55,
+                    position = "left", 
                 },
-                size = 40,
-                position = "left", },
 
                 -- Panel derecho / Right panel
                 {
@@ -90,7 +92,8 @@ return
                     size = 12,
                     position = "bottom",
                 },
-            })
+            }
+        })
 
         vim.fn.sign_define("DapBreakpoint", { text = "🪦" })
 

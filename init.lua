@@ -193,7 +193,6 @@ k.set("n", "<leader>db", dap.list_breakpoints, { desc = "List Breakpoints", nore
 k.set("n", "<leader>dq", function()
   dap.terminate()
   dapui.close()
-  dapvt.toggle()
 end, { desc = "Terminate", noremap = true, silent = true })
 
 k.set("n", "<leader>de", function()
